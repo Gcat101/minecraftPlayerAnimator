@@ -24,18 +24,14 @@ public class BendHelper extends MutableModelPart implements IBendHelper {
     protected float angl = 0;
 
 
-    public BendHelper(ModelPart modelPart, boolean isUpperPart, @Nullable SetableSupplier<AnimationProcessor> emote){
-        super(modelPart);
-        this.emote = emote;
-        ((IModelPart) modelPart).mutate(this);
-        ((IUpperPartHelper) modelPart).setUpperPart(isUpperPart);
-    }
-
-    /**
-     * function to avoid impossible type resolve
-     */
-    public static IBendHelper createNew(ModelPart modelPart, boolean isUpper, @Nullable SetableSupplier<AnimationProcessor> emote) {
-        return new BendHelper(modelPart, isUpper, emote);
+    @Override
+    public void bend(ModelPart modelPart, float axis, float rotation){
+        // Don't enable bend until rotation is bigger than epsilon. This should avoid unnecessary heavy calculations.
+        if (Math.abs(rotation) >= 0.0001f) {
+            ModelPartAccessor.optionalGetCuboid(modelPart, 0).ifPresent(mutableCuboid -> ((BendableCuboid) mutableCuboid.getAndActivateMutator("bend")).applyBend(axis, rotation));
+        } else {
+            ModelPartAccessor.optionalGetCuboid(modelPart, 0).ifPresent(mutableCuboid -> mutableCuboid.getAndActivateMutator(null));
+        }
     }
 
     @Override
