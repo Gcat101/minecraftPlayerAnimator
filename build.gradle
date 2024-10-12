@@ -12,7 +12,7 @@ architectury {
     minecraft = rootProject.minecraft_version
 }
 
-project.mod_version = mod_version + "+1.18"
+project.mod_version = mod_version + "+1.16.5"
 
 allprojects {
     apply plugin: "java"
@@ -48,7 +48,7 @@ allprojects {
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
-        options.release = 17
+        options.release = 8
     }
 
     java {
